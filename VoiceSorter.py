@@ -12,6 +12,17 @@ from pyannote.core import Segment
 from joblib import Parallel, delayed
 
 import pickle
+
+
+video_directory = "path/to/video_directory"
+output_directory = "path/to/output_directory"
+sample_directory = "path/to/sample_directory"
+
+user_token = "YOUR_TOKEN_HERE"
+
+similarity_threshold = 0.5
+segment_min = 0.5
+
 def save_results(diarization, output_path):
     with open(output_path, 'wb') as f:
         pickle.dump(diarization, f)
@@ -91,29 +102,24 @@ def process_video_file(video_filename):
 
     progress_bar.close()
 
-similarity_threshold = 0.5
-segment_min = 0.75
 
-video_directory = "path/to/video_directory"
-output_directory = "path/to/output_directory"
 
 if not os.path.exists(output_directory):
     os.makedirs(output_directory)
 
 
-
 # Use GPU if CUDA is available. (Needs to install pytorch accordingly.)
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Load pipeline for diarization.
-diarization_pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token="YOUR_TOKEN_HERE")
+diarization_pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1", use_auth_token=user_token)
 diarization_pipeline = diarization_pipeline.to(device)
 
 # Load model for embedding.
-embedding_model = Inference("pyannote/embedding", use_auth_token="YOUR_TOKEN_HERE", device=device)
+embedding_model = Inference("pyannote/embedding", use_auth_token=user_token, device=device)
 
 
 # Sample audio files for each speakers.
-sample_directory = "path/to/sample_directory"
+
 speaker_embeddings = {}
 
 # Generating Embeddence

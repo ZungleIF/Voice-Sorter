@@ -6,7 +6,7 @@
 Python 3.10.0
 ```
 pip install pyannote.audio
-pip install torch, torchaudio, torchvision
+pip install torch torchaudio torchvision
 pip install joblib
 ```
 ## Usage
